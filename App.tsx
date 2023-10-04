@@ -3,15 +3,19 @@ import {
   Archivo_400Regular,
   Archivo_500Medium,
   Archivo_600SemiBold,
-} from "@expo-google-fonts/archivo";
+} from '@expo-google-fonts/archivo';
 import {
   Inter_400Regular,
   Inter_500Medium,
   Inter_700Bold,
-} from "@expo-google-fonts/inter";
-import { Text, View, StatusBar } from "react-native";
+} from '@expo-google-fonts/inter';
+import AppProvider from '@hooks/index';
+import { NavigationContainer } from '@react-navigation/native';
+import Routes from '@routes/index';
+import { StatusBar } from 'react-native';
+import { ThemeProvider } from 'styled-components';
 
-// SplashScreen.preventAutoHideAsync();
+import theme from './src/styles/theme';
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -23,14 +27,22 @@ export default function App() {
     Archivo_600SemiBold,
   });
 
+  if (!fontsLoaded) {
+    return null;
+  }
+
   return (
-    <View>
+    <NavigationContainer>
       <StatusBar
         barStyle="light-content"
-        backgroundColor={"#4e3975"}
+        backgroundColor={theme.colors.header}
         translucent
       />
-      {fontsLoaded ? <Text>Inventory App v3!</Text> : <View />}
-    </View>
+      <ThemeProvider theme={theme}>
+        <AppProvider>
+          <Routes />
+        </AppProvider>
+      </ThemeProvider>
+    </NavigationContainer>
   );
 }
